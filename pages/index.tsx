@@ -1,9 +1,48 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import styles from '@/styles/Home.module.css'
+/* eslint-disable react/no-children-prop */
+import Head from "next/head";
+import Image from "next/image";
+import { Inter } from "next/font/google";
+import styles from "@/styles/Home.module.css";
+import { Canvas, useThree } from "@react-three/fiber";
+import Scan from "@/components/scan/Scan";
+import { Lightmap } from "@react-three/lightmap";
+import { OrbitControls } from "@react-three/drei";
+import { useEffect, useState } from "react";
+const inter = Inter({ subsets: ["latin"] });
 
-const inter = Inter({ subsets: ['latin'] })
+const scanPositions: number[][] = [
+  [0, 0, 0],
+  [0, 10, 0],
+  [-10, 0, 10],
+  [10, 0, -10],
+  [10, 0, 10],
+  [0, -10, 0],
+];
+const camPosition: number[] = [-6, 7, 7];
+
+var focusIterator = 0;
+var orbitPosition: number[] = [];
+
+
+if (typeof window === "object") {
+  document.onkeydown = (e) => {
+    console.log("key", e.code);
+
+    switch (e.code) {
+      case "ArrowLeft":
+        focusIterator -= 1;
+        break;
+      case "ArrowRight":
+        focusIterator += 1;
+        break;
+    }
+    if (focusIterator < 0) focusIterator = 0;
+    if (focusIterator > 5) focusIterator = 5;
+  };
+}
+
+
+
 
 export default function Home() {
   return (
@@ -15,100 +54,78 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <div className={styles.description}>
-          <p>
-            Get started by editing&nbsp;
-            <code className={styles.code}>pages/index.tsx</code>
-          </p>
-          <div>
-            <a
-              href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              By{' '}
-              <Image
-                src="/vercel.svg"
-                alt="Vercel Logo"
-                className={styles.vercelLogo}
-                width={100}
-                height={24}
-                priority
-              />
-            </a>
-          </div>
-        </div>
-
-        <div className={styles.center}>
-          <Image
-            className={styles.logo}
-            src="/next.svg"
-            alt="Next.js Logo"
-            width={180}
-            height={37}
-            priority
-          />
-        </div>
-
-        <div className={styles.grid}>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
+        <div className={styles.sceneContainer}>
+          <Canvas
+            shadows
+            className={styles.canvas}
+            camera={{
+              position: [camPosition[0], camPosition[1], camPosition[2]],
+            }}
           >
-            <h2 className={inter.className}>
-              Docs <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Find in-depth information about Next.js features and&nbsp;API.
-            </p>
-          </a>
+            <ambientLight color="white" intensity={0.3} />
+            <directionalLight
+              intensity={1.5}
+              position={[-3, 2, 0]}
+              castShadow
+            />
+            {/* <SpotLight
+              position={[3, 2, 2]}
+              distance={15}
+              angle={1.0}
+              attenuation={15}
+              anglePower={5} // Diffuse-cone anglePower (default: 5)
+            /> */}
+            {/* <Lightmap> */}
+            <Scan
+              id="flur"
+              filePath="/scans/Flur_scan.glb"
+              position={scanPositions[1]}
+              props={""}
+            />
+            <Scan
+              id="dach"
+              filePath="/scans/Dach_scan.glb"
+              position={scanPositions[0]}
+              props={""}
+            />
+            <Scan
+              id="küche"
+              filePath="/scans/Küche_scan.glb"
+              position={scanPositions[2]}
+              props={""}
+            />
+            <Scan
+              id="polizeirevier"
+              filePath="/scans/Polizeirevier_scan.glb"
+              position={scanPositions[3]}
+              props={""}
+            />
+            <Scan
+              id="wohnzimmer"
+              filePath="/scans/Wohnzimmer_scan.glb"
+              position={scanPositions[4]}
+              props={""}
+            />
+            <Scan
+              id="parkplatz"
+              filePath="/scans/Parkplatz_scan.glb"
+              position={scanPositions[5]}
+              props={""}
+            />
 
-          <a
-            href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Learn <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Learn about Next.js in an interactive course with&nbsp;quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Templates <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Discover and deploy boilerplate example Next.js&nbsp;projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Deploy <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Instantly deploy your Next.js site to a shareable URL
-              with&nbsp;Vercel.
-            </p>
-          </a>
+            <OrbitControls
+            // @ts-ignore: Spring type is Vector3 Type (Typescript return error on position)
+              target={scanPositions[focusIterator]}
+              rotateSpeed={0.3}
+              panSpeed={0.05}
+            />
+            {/* </Lightmap> */}
+          </Canvas>
         </div>
       </main>
     </>
-  )
+  );
+}
+function useFrame(arg0: (state: any) => void) {
+  throw new Error("Function not implemented.");
 }
