@@ -8,43 +8,66 @@ import Scan from "@/components/scan/Scan";
 import { Lightmap } from "@react-three/lightmap";
 import { OrbitControls } from "@react-three/drei";
 import { useEffect, useState } from "react";
+import { log } from "console";
 const inter = Inter({ subsets: ["latin"] });
 
-const scanPositions: number[][] = [
+
+var scanPosition: number = 0;
+var scanPositions: number[][] = [
   [0, 0, 0],
-  [0, 10, 0],
-  [-10, 0, 10],
-  [10, 0, -10],
-  [10, 0, 10],
-  [0, -10, 0],
+  [-12, 0, -12],
+  [0, 12, 0],
+  [-12, 0, 12],
+  [12, 0, -12],
+  [12, 0, 12],
+  // [0, -12, 0],
 ];
 const camPosition: number[] = [-6, 7, 7];
 
-var focusIterator = 0;
+var focusIterator = 1;
 var orbitPosition: number[] = [];
 
 
-if (typeof window === "object") {
-  document.onkeydown = (e) => {
-    console.log("key", e.code);
-
-    switch (e.code) {
-      case "ArrowLeft":
-        focusIterator -= 1;
-        break;
-      case "ArrowRight":
-        focusIterator += 1;
-        break;
-    }
-    if (focusIterator < 0) focusIterator = 0;
-    if (focusIterator > 5) focusIterator = 5;
-  };
-}
-
-
-
-
 export default function Home() {
+  const [scan1, setScan1] = useState(1);
+  const [scan2, setScan2] = useState(2);
+  const [scan3, setScan3] = useState(3);
+  const [scan4, setScan4] = useState(4);
+  const [scan5, setScan5] = useState(5);
+  const [scan6, setScan6] = useState(6);
+
+  useEffect(() => {
+
+  })
+
+
+  function repositionScan(currentPos: number) {
+    let pos = ((focusIterator + currentPos) % 5) + 1;
+
+    // if (pos === )
+    
+    return pos;
+  }
+
+  if (typeof window === "object") {
+    document.onkeydown = (e) => {
+      console.log("key", e.code);
+  
+      switch (e.code) {
+        case "ArrowLeft":
+          focusIterator -= 1;
+          break;
+        case "ArrowRight":
+          focusIterator += 1;
+          break;
+      }
+      if (focusIterator < 0) focusIterator = 0;
+      if (focusIterator > 5) focusIterator = 5;
+      // if (focusIterator < 1) focusIterator = 1;
+      // if (focusIterator > 6) focusIterator = 6;
+      
+    };
+  }
   return (
     <>
       <Head>
@@ -79,37 +102,38 @@ export default function Home() {
             <Scan
               id="flur"
               filePath="/scans/Flur_scan.glb"
-              position={scanPositions[1]}
+              // position={scanPositions[1]}
+              position={scanPositions[repositionScan(1)]}
               props={""}
             />
             <Scan
               id="dach"
               filePath="/scans/Dach_scan.glb"
-              position={scanPositions[0]}
+              position={scanPositions[repositionScan(2)]}
               props={""}
             />
             <Scan
               id="küche"
               filePath="/scans/Küche_scan.glb"
-              position={scanPositions[2]}
+              position={scanPositions[repositionScan(3)]}
               props={""}
             />
             <Scan
               id="polizeirevier"
               filePath="/scans/Polizeirevier_scan.glb"
-              position={scanPositions[3]}
+              position={scanPositions[repositionScan(4)]}
               props={""}
             />
             <Scan
               id="wohnzimmer"
               filePath="/scans/Wohnzimmer_scan.glb"
-              position={scanPositions[4]}
+              position={scanPositions[repositionScan(5)]}
               props={""}
             />
             <Scan
               id="parkplatz"
               filePath="/scans/Parkplatz_scan.glb"
-              position={scanPositions[5]}
+              position={scanPositions[repositionScan(6)]}
               props={""}
             />
 
