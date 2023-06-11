@@ -1,15 +1,12 @@
 /* eslint-disable react/no-children-prop */
 import Head from "next/head";
-import Image from "next/image";
 import { Inter } from "next/font/google";
 import styles from "@/styles/Home.module.css";
 import { Canvas } from "@react-three/fiber";
 import Scan from "@/components/scan/Scan";
-import { Lightmap } from "@react-three/lightmap";
 import { OrbitControls } from "@react-three/drei";
-import { useEffect, useState } from "react";
-import { log } from "console";
-import THREE from "three";
+import { Suspense, useRef, useState } from "react";
+import Image from "next/image";
 const inter = Inter({ subsets: ["latin"] });
 
 var scanPosition: number = 0;
@@ -22,24 +19,9 @@ var scanPositions: number[][] = [
   [0, 0, -15],
 ];
 const camPosition: number[] = [0, 0, 0];
-// const camPosition: number[] = [5, 5, 5];
-
 var focusIterator = 0;
-var orbitPosition: number[] = [];
-
-// const size = 10;
-// const divisions = 10;
-
-// const gridHelper = new THREE.GridHelper( size, divisions );
 
 export default function Home() {
-  // const [scan1, setScan1] = useState(1);
-  // const [scan2, setScan2] = useState(2);
-  // const [scan3, setScan3] = useState(3);
-  // const [scan4, setScan4] = useState(4);
-  // const [scan5, setScan5] = useState(5);
-  // const [scan6, setScan6] = useState(6);
-
   const [camPos, setCamPos] = useState(camPosition);
 
   function repositionCam(currentPos: number) {
@@ -50,8 +32,6 @@ export default function Home() {
 
   if (typeof window === "object") {
     document.onkeydown = (e) => {
-      console.log("key", e.code);
-
       switch (e.code) {
         case "ArrowLeft":
           focusIterator -= 1;
@@ -72,6 +52,38 @@ export default function Home() {
       console.log(camPos);
     };
   }
+
+  const audio = useRef<HTMLVideoElement>(null);
+
+  function handlePlay() {
+    console.log("play2");
+    audio.current?.play();
+
+    console.log(audio.current?.childNodes);
+  }
+  function handlePause() {
+    console.log("pause2");
+    audio.current?.pause();
+  }
+  function handleStop() {
+    console.log("stop2");
+    audio.current?.pause();
+    audio.current!.currentTime = 0;
+  }
+
+  function Loading() {
+    return (
+      <div className={styles.loading}>
+        <Image
+          src="/images/bernd.gif"
+          alt="Bilder von Bernd"
+          width={640}
+          height={360}
+        />
+      </div>
+    );
+  }
+
   return (
     <>
       <Head>
@@ -81,92 +93,149 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <div className={styles.sceneContainer}>
-          <Canvas
-            shadows
-            className={styles.canvas}
-            camera={{
-              position: [camPosition[0], camPosition[1], camPosition[2]],
-              // position: [camPos[0], camPos[1], camPos[2]],
-            }}
-          >
-            {/* <gridHelper /> */}
-            <ambientLight color="white" intensity={0.3} />
-            <directionalLight
-              intensity={1.5}
-              position={[-3, 2, 0]}
-              castShadow
-            />
-            {/* <SpotLight
+        <div></div>
+        <Suspense>
+          <Suspense fallback={<Loading />}>
+            <div className={styles.sceneContainer}>
+              <Canvas
+                shadows
+                className={styles.canvas}
+                camera={{
+                  position: [camPosition[0], camPosition[1], camPosition[2]],
+                  // position: [camPos[0], camPos[1], camPos[2]],
+                }}
+              >
+                {/* <gridHelper /> */}
+                <ambientLight color="white" intensity={0.3} />
+                <directionalLight
+                  intensity={1.5}
+                  position={[-3, 2, 0]}
+                  castShadow
+                />
+                {/* <SpotLight
               position={[3, 2, 2]}
               distance={15}
               angle={1.0}
               attenuation={15}
               anglePower={5} // Diffuse-cone anglePower (default: 5)
             /> */}
-            {/* <Lightmap> */}
-            <Scan
-              id="dach"
-              filePath="/scans/Dach_scan.glb"
-              position={scanPositions[0]}
-              // position={scanPositions[repositionScan(2)]}
-              props={""}
-              float={focusIterator === 0 ? false : true}
-            />
-            <Scan
-              id="flur"
-              filePath="/scans/Flur_scan.glb"
-              position={scanPositions[1]}
-              // position={scanPositions[repositionScan(1)]}
-              props={""}
-              float={focusIterator === 1 ? false : true}
-            />
-            <Scan
-              id="küche"
-              filePath="/scans/Küche_scan.glb"
-              position={scanPositions[2]}
-              // position={scanPositions[repositionScan(3)]}
-              props={""}
-              float={focusIterator === 2 ? false : true}
-            />
-            <Scan
-              id="polizeirevier"
-              filePath="/scans/Polizeirevier_scan.glb"
-              position={scanPositions[3]}
-              // position={scanPositions[repositionScan(4)]}
-              props={""}
-              float={focusIterator === 3 ? false : true}
-            />
-            <Scan
-              id="wohnzimmer"
-              filePath="/scans/Wohnzimmer_scan.glb"
-              position={scanPositions[4]}
-              // position={scanPositions[repositionScan(5)]}
-              props={""}
-              float={focusIterator === 4 ? false : true}
-            />
-            <Scan
-              id="parkplatz"
-              filePath="/scans/Parkplatz_scan.glb"
-              position={scanPositions[5]}
-              // position={scanPositions[repositionScan(6)]}
-              props={""}
-              float={focusIterator === 5 ? false : true}
-            />
+                {/* <Lightmap> */}
+                <Scan
+                  id="dach"
+                  filePath="/scans/Dach_scan.glb"
+                  position={scanPositions[0]}
+                  // position={scanPositions[repositionScan(2)]}
+                  props={""}
+                  inFocus={focusIterator === 0 ? true : false}
+                  float={focusIterator === 0 ? false : true}
+                  audioURL="/audio/Dach.mp3"
+                />
+                <Scan
+                  id="flur"
+                  filePath="/scans/Flur_scan.glb"
+                  position={scanPositions[1]}
+                  // position={scanPositions[repositionScan(1)]}
+                  props={""}
+                  inFocus={focusIterator === 1 ? true : false}
+                  float={focusIterator === 1 ? false : true}
+                  audioURL={focusIterator === 1 ? "/audio/Flur.mp3" : ""}
+                />
+                <Scan
+                  id="küche"
+                  filePath="/scans/Küche_scan.glb"
+                  position={scanPositions[2]}
+                  // position={scanPositions[repositionScan(3)]}
+                  props={""}
+                  inFocus={focusIterator === 2 ? true : false}
+                  float={focusIterator === 2 ? false : true}
+                  audioURL={focusIterator === 2 ? "/audio/Küche.mp3" : ""}
+                />
+                <Scan
+                  id="polizeirevier"
+                  filePath="/scans/Polizeirevier_scan.glb"
+                  position={scanPositions[3]}
+                  // position={scanPositions[repositionScan(4)]}
+                  props={""}
+                  inFocus={focusIterator === 3 ? true : false}
+                  float={focusIterator === 3 ? false : true}
+                  audioURL={
+                    focusIterator === 3 ? "/audio/Polizeirevier.mp3" : ""
+                  }
+                />
+                <Scan
+                  id="wohnzimmer"
+                  filePath="/scans/Wohnzimmer_scan.glb"
+                  position={scanPositions[4]}
+                  // position={scanPositions[repositionScan(5)]}
+                  props={""}
+                  inFocus={focusIterator === 4 ? true : false}
+                  float={focusIterator === 4 ? false : true}
+                  audioURL={focusIterator === 4 ? "/audio/Wohnzimmer.mp3" : ""}
+                />
+                <Scan
+                  id="parkplatz"
+                  filePath="/scans/Parkplatz_scan.glb"
+                  position={scanPositions[5]}
+                  // position={scanPositions[repositionScan(6)]}
+                  props={""}
+                  inFocus={focusIterator === 5 ? true : false}
+                  float={focusIterator === 5 ? false : true}
+                  audioURL={focusIterator === 5 ? "/audio/Parkplatz.mp3" : ""}
+                />
 
-            <OrbitControls
-              // @ts-ignore: Spring type is Vector3 Type (Typescript return error on position)
-              target={scanPositions[focusIterator]}
-              rotateSpeed={0.3}
-              panSpeed={0.05}
-            />
-            {/* </Lightmap> */}
-          </Canvas>
-        </div>
+                <OrbitControls
+                  // @ts-ignore: Spring type is Vector3 Type (Typescript return error on position)
+                  target={scanPositions[focusIterator]}
+                  rotateSpeed={0.3}
+                  panSpeed={0.05}
+                />
+                {/* </Lightmap> */}
+              </Canvas>
+            </div>
+
+            <div className={styles["audio-controls"]}>
+              <div id="play" onClick={() => handlePlay()}>
+                Play
+              </div>
+              <div id="pause" onClick={() => handlePause()}>
+                Pause
+              </div>
+              <div id="stop" onClick={() => handleStop()}>
+                Stop
+              </div>
+            </div>
+
+            <video
+              className={styles.audio}
+              ref={audio}
+              src={`/audio/Dach.mp3`}
+              muted
+
+              // controls
+              // muted
+            >
+              <track
+                className={styles.track}
+                default
+                kind="captions"
+                src="/captions/Dach.vtt"
+              />
+            </video>
+
+            {/* <div className={styles.captions}>
+          <span>Das ist mein altes Zimmer</span>
+          <span>
+            in der Wohnung meiner Mutter in Esslingen im Dachgeschoss.
+          </span>
+          <span>Ich wohn{"'"} mittlerweile in Stuttgart,</span>
+          <span>
+            aber da meine Freundin Marla zu besuch ist, schlafen wir ein, zwei
+            Nächte dort
+          </span>
+        </div> */}
+          </Suspense>
+        </Suspense>
       </main>
     </>
   );
-}
-function useFrame(arg0: (state: any) => void) {
-  throw new Error("Function not implemented.");
 }
