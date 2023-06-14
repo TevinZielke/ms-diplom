@@ -1,13 +1,14 @@
 /* eslint-disable react/no-children-prop */
 import Head from "next/head";
 import { Inter } from "next/font/google";
-import styles from "@/styles/Home.module.css";
+import styles from "@/styles/Home.module.scss";
 import { Canvas } from "@react-three/fiber";
 import Scan from "@/components/scan/Scan";
 import { OrbitControls } from "@react-three/drei";
-import { Suspense, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 const inter = Inter({ subsets: ["latin"] });
+import classNames from "classnames";
 
 var scanPosition: number = 0;
 var scanPositions: number[][] = [
@@ -34,9 +35,11 @@ export default function Home() {
     document.onkeydown = (e) => {
       switch (e.code) {
         case "ArrowLeft":
+          handleStop();
           focusIterator -= 1;
           break;
         case "ArrowRight":
+          handleStop();
           focusIterator += 1;
           break;
       }
@@ -48,38 +51,338 @@ export default function Home() {
       scanPosition[1] += camPosition[1];
       scanPosition[2] += camPosition[2];
       setCamPos(scanPosition);
-
-      console.log(camPos);
     };
   }
 
-  const audio = useRef<HTMLVideoElement>(null);
+  const audioRef = useRef<HTMLVideoElement>(null);
 
   function handlePlay() {
-    console.log("play2");
-    audio.current?.play();
-
-    console.log(audio.current?.childNodes);
+    audioRef.current?.play();
   }
   function handlePause() {
-    console.log("pause2");
-    audio.current?.pause();
+    audioRef.current?.pause();
   }
   function handleStop() {
-    console.log("stop2");
-    audio.current?.pause();
-    audio.current!.currentTime = 0;
+    audioRef.current?.pause();
+    audioRef.current!.currentTime = 0;
   }
+
+  const [pageProgress, setPageProgress] = useState(0);
+  const [showIntroGif, setShowIntroGif] = useState(true);
+  const [showIntroText, setShowIntroText] = useState(false);
+  const [showIntroParagraphOne, setShowIntroParagraphOne] = useState(false);
+  const [showIntroParagraphTwo, setShowIntroParagraphTwo] = useState(false);
+  const [showIntroParagraphThree, setShowIntroParagraphThree] = useState(false);
+  const [showIntroParagraphFour, setShowIntroParagraphFour] = useState(false);
+  const [showIntroParagraphFive, setShowIntroParagraphFive] = useState(false);
+  const [showInstructionText, setShowInstructionText] = useState(false);
+  const [showContentWarning, setShowContentWarning] = useState(false);
+  const [showScene, setShowScene] = useState(false);
+
+  // 0 - GIF
+  // 1 - IntroParagraph 1
+  // 2 - IntroParagraph 2
+  // 3 - IntroParagraph 3
+  // 4 - IntroParagraph 4
+  // 5 - IntroParagraph 5
+  // 6 - Instructions
+  // 7 - ContentWarning
+  // 8 - Scene
+
+  useEffect(() => {
+    switch (pageProgress) {
+      case 0: {
+        setShowIntroGif(true);
+        setShowIntroText(false);
+        setShowIntroParagraphOne(false);
+        setShowIntroParagraphTwo(false);
+        setShowIntroParagraphThree(false);
+        setShowIntroParagraphFour(false);
+        setShowIntroParagraphFive(false);
+        setShowInstructionText(false);
+        setShowContentWarning(false);
+        setShowScene(false);
+        break;
+      }
+      case 1: {
+        setShowIntroGif(false);
+        setShowIntroText(true);
+        setShowIntroParagraphOne(true);
+        setShowIntroParagraphTwo(false);
+        setShowIntroParagraphThree(false);
+        setShowIntroParagraphFour(false);
+        setShowIntroParagraphFive(false);
+        setShowInstructionText(false);
+        setShowContentWarning(false);
+        setShowScene(false);
+        break;
+      }
+      case 2: {
+        setShowIntroGif(false);
+        setShowIntroText(true);
+        setShowIntroParagraphOne(true);
+        setShowIntroParagraphTwo(true);
+        setShowIntroParagraphThree(false);
+        setShowIntroParagraphFour(false);
+        setShowIntroParagraphFive(false);
+        setShowInstructionText(false);
+        setShowContentWarning(false);
+        setShowScene(false);
+        break;
+      }
+      case 3: {
+        setShowIntroGif(false);
+        setShowIntroText(true);
+        setShowIntroParagraphOne(true);
+        setShowIntroParagraphTwo(true);
+        setShowIntroParagraphThree(true);
+        setShowIntroParagraphFour(false);
+        setShowIntroParagraphFive(false);
+        setShowInstructionText(false);
+        setShowContentWarning(false);
+        setShowScene(false);
+        break;
+      }
+      case 4: {
+        setShowIntroGif(false);
+        setShowIntroText(true);
+        setShowIntroParagraphOne(true);
+        setShowIntroParagraphTwo(true);
+        setShowIntroParagraphThree(true);
+        setShowIntroParagraphFour(true);
+        setShowIntroParagraphFive(false);
+        setShowInstructionText(false);
+        setShowContentWarning(false);
+        setShowScene(false);
+        break;
+      }
+      case 5: {
+        setShowIntroGif(false);
+        setShowIntroText(true);
+        setShowIntroParagraphOne(true);
+        setShowIntroParagraphTwo(true);
+        setShowIntroParagraphThree(true);
+        setShowIntroParagraphFour(true);
+        setShowIntroParagraphFive(true);
+        setShowInstructionText(false);
+        setShowContentWarning(false);
+        setShowScene(false);
+        break;
+      }
+      case 6: {
+        setShowIntroGif(false);
+        setShowIntroText(false);
+        setShowIntroParagraphOne(false);
+        setShowIntroParagraphTwo(false);
+        setShowIntroParagraphThree(false);
+        setShowIntroParagraphFour(false);
+        setShowIntroParagraphFive(false);
+        setShowInstructionText(true);
+        setShowContentWarning(false);
+        setShowScene(false);
+        break;
+      }
+      case 7: {
+        setShowIntroGif(false);
+        setShowIntroText(false);
+        setShowIntroParagraphOne(false);
+        setShowIntroParagraphTwo(false);
+        setShowIntroParagraphThree(false);
+        setShowIntroParagraphFour(false);
+        setShowIntroParagraphFive(false);
+        setShowInstructionText(false);
+        setShowContentWarning(true);
+        setShowScene(false);
+        break;
+      }
+      case 8: {
+        setShowIntroGif(false);
+        setShowIntroText(false);
+        setShowIntroParagraphOne(false);
+        setShowIntroParagraphTwo(false);
+        setShowIntroParagraphThree(false);
+        setShowIntroParagraphFour(false);
+        setShowIntroParagraphFive(false);
+        setShowInstructionText(false);
+        setShowContentWarning(false);
+        setShowScene(true);
+        break;
+      }
+      default: {
+        setShowIntroGif(true);
+        setShowIntroText(false);
+        setShowIntroParagraphOne(false);
+        setShowIntroParagraphTwo(false);
+        setShowIntroParagraphThree(false);
+        setShowIntroParagraphFour(false);
+        setShowIntroParagraphFive(false);
+        setShowInstructionText(false);
+        setShowContentWarning(false);
+        setShowScene(false);
+      }
+    }
+  }, [pageProgress]);
 
   function Loading() {
     return (
       <div className={styles.loading}>
-        <Image
-          src="/images/bernd.gif"
-          alt="Bilder von Bernd"
-          width={640}
-          height={360}
-        />
+        <p>
+          Loading
+          <span>.</span>
+          <span>.</span>
+          <span>.</span>
+        </p>
+      </div>
+    );
+  }
+
+  function IntroText() {
+    return (
+      <div
+        className={classNames(styles["intro__text"], {
+          [styles["intro__text--hidden"]]: !showIntroText,
+        })}
+      >
+        <p
+          className={classNames(styles["intro__text__paragraph"], {
+            [styles["intro__text__paragraph--hidden"]]: !showIntroParagraphOne,
+          })}
+        >
+          February 8th, 2018 This is my stepfather Bernd. These selfies were
+          taken from the 7th of February 2015 till the 25th of January 2018, two
+          weeks before he died
+          <span
+            className={classNames({
+              [styles["intro__text__paragraph__dot"]]: pageProgress === 1,
+            })}
+          >
+            .
+          </span>
+        </p>
+        <p
+          className={classNames(styles["intro__text__paragraph"], {
+            [styles["intro__text__paragraph--hidden"]]: !showIntroParagraphTwo,
+          })}
+        >
+          My Mother found the pictures on his phone after the police confiscate
+          it and gave it to us. We can only assume why he took these pictures of
+          himself but will never know the purpose of them since he never used
+          them for anything else. The following experience shows my memories of
+          the day my stepfather Bernd passed away, which significantly shaped my
+          relationship with death. After struggling with depression for years,
+          Bernd decided to take his own life on February 8th, 2018. I am not
+          religious but when a pastor visited our house after Bernd’s death and
+          described the depressions as a kind of tumour it helped me and my
+          family a lot. Sometimes you can cure them but sometimes they are
+          incurable. My memories of that day are tied to places that have since
+          become charged with them. To visualize these memories, I returned to
+          these places and 3D scanned them. The resulting fragmentary images are
+          analogous to my own fragmented memories of these places
+          <span
+            className={classNames({
+              [styles["intro__text__paragraph__dot"]]: pageProgress === 2,
+            })}
+          >
+            .
+          </span>
+        </p>
+        <p
+          className={classNames(styles["intro__text__paragraph"], {
+            [styles["intro__text__paragraph--hidden"]]:
+              !showIntroParagraphThree,
+          })}
+        >
+          Visitors will have the opportunity to explore my memories. They will
+          be able to navigate through a three-dimensional space, moving through
+          the 3D scanned locations. The experience will be accompanied by sound
+          elements, including recordings of my voice telling the stories behind
+          these places
+          <span
+            className={classNames({
+              [styles["intro__text__paragraph__dot"]]: pageProgress === 3,
+            })}
+          >
+            .
+          </span>
+        </p>
+        <p
+          className={classNames(styles["intro__text__paragraph"], {
+            [styles["intro__text__paragraph--hidden"]]: !showIntroParagraphFour,
+          })}
+        >
+          I was suddenly confronted with death and dealing with grief and
+          experienced the inability of a lot of people to talk about death and
+          grief and to approach me as grieving person. I was in a phase of
+          mourning and also thought about the ways I was mourning, was I ‘sad
+          enough’? Did I suppress my grief in order to protect myself from
+          uncomfortable emotions? Are there good and bad ways of grieving?
+          Through these experiences I realized a strange distancing or tabooing
+          of this topic. The work is aimed at question the taboo surrounding
+          death. Whether it is a suicide or any other cause of death, death is a
+          part of our lives and it is important to confront it
+          <span
+            className={classNames({
+              [styles["intro__text__paragraph__dot"]]: pageProgress === 4,
+            })}
+          >
+            .
+          </span>
+        </p>
+        <p
+          className={classNames(styles["intro__text__paragraph"], {
+            [styles["intro__text__paragraph--hidden"]]: !showIntroParagraphFive,
+          })}
+        >
+          The Website was realised in collaboration with my friend Tevin Zielke
+          <span
+            className={classNames({
+              [styles["intro__text__paragraph__dot"]]: pageProgress === 5,
+            })}
+          >
+            .
+          </span>
+        </p>
+      </div>
+    );
+  }
+
+  function Instructions() {
+    return (
+      <div
+        className={classNames(styles["intro__instructions"], {
+          [styles["intro__instructions--hidden"]]: !showInstructionText,
+        })}
+      >
+        <p>
+          Use <span>arrow keys</span> to <span>change rooms</span>
+        </p>
+        <p>
+          <span>Press and hold left mosue button </span>to
+          <br />
+          <span>through the room</span>
+        </p>
+        <p>
+          Use <span>scroll wheel</span> to <span>zoom in and out</span>
+        </p>
+        <p>
+          <span>Control audio</span> by{" "}
+          <span>clicking Play, Pause or Stop</span>
+        </p>
+      </div>
+    );
+  }
+
+  function ContentWarning() {
+    return (
+      <div
+        className={classNames(styles["intro__content-warning"], {
+          [styles["intro__content-warning--hidden"]]: !showContentWarning,
+        })}
+      >
+        <span>
+          Some viewers may be triggered, offended or scared by the
+          <br /> memos of the memories
+        </span>
       </div>
     );
   }
@@ -93,106 +396,117 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <div></div>
-        <Suspense>
-          <Suspense fallback={<Loading />}>
-            <div className={styles.sceneContainer}>
-              <Canvas
-                shadows
-                className={styles.canvas}
-                camera={{
-                  position: [camPosition[0], camPosition[1], camPosition[2]],
-                  // position: [camPos[0], camPos[1], camPos[2]],
-                }}
-              >
-                {/* <gridHelper /> */}
-                <ambientLight color="white" intensity={0.3} />
-                <directionalLight
-                  intensity={1.5}
-                  position={[-3, 2, 0]}
-                  castShadow
-                />
-                {/* <SpotLight
-              position={[3, 2, 2]}
-              distance={15}
-              angle={1.0}
-              attenuation={15}
-              anglePower={5} // Diffuse-cone anglePower (default: 5)
-            /> */}
-                {/* <Lightmap> */}
-                <Scan
-                  id="dach"
-                  filePath="/scans/Dach_scan.glb"
-                  position={scanPositions[0]}
-                  // position={scanPositions[repositionScan(2)]}
-                  props={""}
-                  inFocus={focusIterator === 0 ? true : false}
-                  float={focusIterator === 0 ? false : true}
-                  audioURL="/audio/Dach.mp3"
-                />
-                <Scan
-                  id="flur"
-                  filePath="/scans/Flur_scan.glb"
-                  position={scanPositions[1]}
-                  // position={scanPositions[repositionScan(1)]}
-                  props={""}
-                  inFocus={focusIterator === 1 ? true : false}
-                  float={focusIterator === 1 ? false : true}
-                  audioURL={focusIterator === 1 ? "/audio/Flur.mp3" : ""}
-                />
-                <Scan
-                  id="küche"
-                  filePath="/scans/Küche_scan.glb"
-                  position={scanPositions[2]}
-                  // position={scanPositions[repositionScan(3)]}
-                  props={""}
-                  inFocus={focusIterator === 2 ? true : false}
-                  float={focusIterator === 2 ? false : true}
-                  audioURL={focusIterator === 2 ? "/audio/Küche.mp3" : ""}
-                />
-                <Scan
-                  id="polizeirevier"
-                  filePath="/scans/Polizeirevier_scan.glb"
-                  position={scanPositions[3]}
-                  // position={scanPositions[repositionScan(4)]}
-                  props={""}
-                  inFocus={focusIterator === 3 ? true : false}
-                  float={focusIterator === 3 ? false : true}
-                  audioURL={
-                    focusIterator === 3 ? "/audio/Polizeirevier.mp3" : ""
-                  }
-                />
-                <Scan
-                  id="wohnzimmer"
-                  filePath="/scans/Wohnzimmer_scan.glb"
-                  position={scanPositions[4]}
-                  // position={scanPositions[repositionScan(5)]}
-                  props={""}
-                  inFocus={focusIterator === 4 ? true : false}
-                  float={focusIterator === 4 ? false : true}
-                  audioURL={focusIterator === 4 ? "/audio/Wohnzimmer.mp3" : ""}
-                />
-                <Scan
-                  id="parkplatz"
-                  filePath="/scans/Parkplatz_scan.glb"
-                  position={scanPositions[5]}
-                  // position={scanPositions[repositionScan(6)]}
-                  props={""}
-                  inFocus={focusIterator === 5 ? true : false}
-                  float={focusIterator === 5 ? false : true}
-                  audioURL={focusIterator === 5 ? "/audio/Parkplatz.mp3" : ""}
-                />
+        <div className={styles.intro}>
+          <div
+            className={classNames(styles["intro__gif"], {
+              [styles["intro__gif--hidden"]]: pageProgress !== 0,
+            })}
+          >
+            <Image
+              src="/images/bernd_s_t.gif"
+              alt="Bilder von Bernd in GIF Format."
+              quality={50}
+              width={960}
+              height={540}
+            />
+          </div>
+          <IntroText />
+          <Instructions />
+          <ContentWarning />
+        </div>
 
-                <OrbitControls
-                  // @ts-ignore: Spring type is Vector3 Type (Typescript return error on position)
-                  target={scanPositions[focusIterator]}
-                  rotateSpeed={0.3}
-                  panSpeed={0.05}
-                />
-                {/* </Lightmap> */}
-              </Canvas>
-            </div>
+        <Suspense fallback={<Loading />}>
+          <div
+            className={classNames(styles["continue"], {
+              [styles["continue--hidden"]]: pageProgress === 8,
+            })}
+            onClick={() => setPageProgress(pageProgress + 1)}
+          >
+            <p>Continue</p>
+          </div>
+          <div
+            className={classNames(styles["scene-container"], {
+              [styles["scene-container--hidden"]]: pageProgress !== 8,
+            })}
+          >
+            <Canvas
+              shadows
+              className={styles.canvas}
+              camera={{
+                position: [camPosition[0], camPosition[1], camPosition[2]],
+              }}
+            >
+              <Scan
+                id="dach"
+                filePath="/scans/Dach_scan.glb"
+                position={scanPositions[0]}
+                // position={scanPositions[repositionScan(2)]}
+                props={""}
+                inFocus={focusIterator === 0 ? true : false}
+                float={focusIterator === 0 ? false : true}
+                audioURL="/audio/Dach.mp3"
+              />
+              <Scan
+                id="flur"
+                filePath="/scans/Flur_scan.glb"
+                position={scanPositions[1]}
+                props={""}
+                inFocus={focusIterator === 1 ? true : false}
+                float={focusIterator === 1 ? false : true}
+                // audioURL={focusIterator === 1 ? "/audio/Flur.mp3" : ""}
+                audioURL={"/audio/Flur.mp3"}
+              />
+              <Scan
+                id="küche"
+                filePath="/scans/Küche_scan.glb"
+                position={scanPositions[2]}
+                props={""}
+                inFocus={focusIterator === 2 ? true : false}
+                float={focusIterator === 2 ? false : true}
+                audioURL={focusIterator === 2 ? "/audio/Küche.mp3" : ""}
+              />
+              <Scan
+                id="polizeirevier"
+                filePath="/scans/Polizeirevier_scan.glb"
+                position={scanPositions[3]}
+                props={""}
+                inFocus={focusIterator === 3 ? true : false}
+                float={focusIterator === 3 ? false : true}
+                audioURL={focusIterator === 3 ? "/audio/Polizeirevier.mp3" : ""}
+              />
+              <Scan
+                id="wohnzimmer"
+                filePath="/scans/Wohnzimmer_scan.glb"
+                position={scanPositions[4]}
+                props={""}
+                inFocus={focusIterator === 4 ? true : false}
+                float={focusIterator === 4 ? false : true}
+                audioURL={focusIterator === 4 ? "/audio/Wohnzimmer.mp3" : ""}
+              />
+              <Scan
+                id="parkplatz"
+                filePath="/scans/Parkplatz_scan.glb"
+                position={scanPositions[5]}
+                props={""}
+                inFocus={focusIterator === 5 ? true : false}
+                float={focusIterator === 5 ? false : true}
+                audioURL={focusIterator === 5 ? "/audio/Parkplatz.mp3" : ""}
+              />
 
+              <OrbitControls
+                // @ts-ignore: Spring type is Vector3 Type (Typescript return error on position)
+                target={scanPositions[focusIterator]}
+                rotateSpeed={0.3}
+                panSpeed={0.05}
+              />
+            </Canvas>
+          </div>
+
+          <div
+            className={classNames(styles["audio-container"], {
+              [styles["audio-container--hidden"]]: !showScene,
+            })}
+          >
             <div className={styles["audio-controls"]}>
               <div id="play" onClick={() => handlePlay()}>
                 Play
@@ -204,36 +518,20 @@ export default function Home() {
                 Stop
               </div>
             </div>
-
             <video
-              className={styles.audio}
-              ref={audio}
+              className={styles["audio-player"]}
+              ref={audioRef}
               src={`/audio/Dach.mp3`}
               muted
-
-              // controls
-              // muted
             >
               <track
                 className={styles.track}
                 default
                 kind="captions"
-                src="/captions/Dach.vtt"
+                src="/captions/Dach2.vtt"
               />
             </video>
-
-            {/* <div className={styles.captions}>
-          <span>Das ist mein altes Zimmer</span>
-          <span>
-            in der Wohnung meiner Mutter in Esslingen im Dachgeschoss.
-          </span>
-          <span>Ich wohn{"'"} mittlerweile in Stuttgart,</span>
-          <span>
-            aber da meine Freundin Marla zu besuch ist, schlafen wir ein, zwei
-            Nächte dort
-          </span>
-        </div> */}
-          </Suspense>
+          </div>
         </Suspense>
       </main>
     </>
