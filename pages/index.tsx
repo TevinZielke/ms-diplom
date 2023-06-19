@@ -55,6 +55,7 @@ export default function Home() {
         if (fi < 0) setFocusIterator(0);
         if (fi > 5) setFocusIterator(5);
         if (fi >= 0 && fi <= 5) setFocusIterator(fi);
+        console.log("fi", fi);
 
         var scanPosition = scanPositions[focusIterator];
         scanPosition[0] += camPos[0];
