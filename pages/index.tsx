@@ -63,7 +63,7 @@ export default function Home() {
         // setCamPos(scanPosition);
       };
     }
-  });
+  }, [camPos, focusIterator]);
 
   const audioRef = useRef<HTMLVideoElement>(null);
 
