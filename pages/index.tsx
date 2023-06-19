@@ -33,25 +33,27 @@ export default function Home() {
   }
 
   if (typeof window === "object") {
+    var fi = focusIterator;
     document.onkeydown = (e) => {
       console.log("key", e);
 
       switch (e.code) {
         case "ArrowLeft":
           handleStop();
-          setFocusIterator(focusIterator - 1);
-          // focusIterator = -1;
+          // setFocusIterator(focusIterator - 1);
+          fi = -1;
           break;
         case "ArrowRight":
           handleStop();
-          setFocusIterator(focusIterator + 1);
-          // focusIterator = +1;
+          // setFocusIterator(focusIterator + 1);
+          fi = +1;
           break;
       }
       // if (focusIterator < 0) focusIterator = 0;
       // if (focusIterator > 5) focusIterator = 5;
-      if (focusIterator < 0) setFocusIterator(0);
-      if (focusIterator > 5) setFocusIterator(5);
+      if (fi < 0) setFocusIterator(0);
+      if (fi > 5) setFocusIterator(5);
+      if (fi >= 0 && fi <= 5) setFocusIterator(fi);
 
       var scanPosition = scanPositions[focusIterator];
       scanPosition[0] += camPos[0];
