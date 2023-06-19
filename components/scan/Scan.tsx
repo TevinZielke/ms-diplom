@@ -35,16 +35,11 @@ export default function Scan({
 
   function handlePlay() {
     audioRef.current?.play();
-    console.log("play", audioRef.current);
   }
   function handlePause() {
-    console.log("pause");
-
     audioRef.current?.pause();
   }
   function handleStop() {
-    console.log("stop");
-
     audioRef.current?.stop();
   }
 
@@ -90,14 +85,11 @@ export default function Scan({
                   position={position}
                   children-0-castShadow
                 />
-
-                {/* {audioPlaying && ( */}
                 <>
                   <PositionalAudio
                     url={audioURL}
                     distance={8}
                     {...props}
-                    // autoplay
                     setVolume={1}
                     position={position}
                     hasPlaybackControl
@@ -108,30 +100,6 @@ export default function Scan({
                 {/* )} */}
               </mesh>
             </group>
-            {/* <group>
-              <mesh>
-                <Html
-                  itemID="play"
-                  transform
-                  distanceFactor={10}
-                  position={[position[0] - 3, position[1] - 1, position[2]]}
-                  style={{ width: "200px", color: "white", cursor: "pointer" }}
-                >
-                  Play
-                </Html>
-
-                <Html
-                  itemID="pause"
-                  transform
-                  distanceFactor={10}
-                  position={[position[0] - 3, position[1], position[2]]}
-                  style={{ width: "200px", color: "blue", cursor: "pointer" }}
-                  // onClick={() => handlePause()}
-                >
-                  Pause
-                </Html>
-              </mesh>
-            </group> */}
           </>
         )}
       </Suspense>

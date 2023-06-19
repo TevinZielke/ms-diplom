@@ -20,9 +20,10 @@ var scanPositions: number[][] = [
   [0, 0, -15],
 ];
 const camPosition: number[] = [0, 0, 0];
-var focusIterator = 0;
 
 export default function Home() {
+  const [focusIterator, setFocusIterator] = useState(0);
+  // var focusIterator = 0;
   const [camPos, setCamPos] = useState(camPosition);
 
   function repositionCam(currentPos: number) {
@@ -36,21 +37,25 @@ export default function Home() {
       switch (e.code) {
         case "ArrowLeft":
           handleStop();
-          focusIterator -= 1;
+          setFocusIterator(focusIterator - 1);
+          // focusIterator = -1;
           break;
         case "ArrowRight":
           handleStop();
-          focusIterator += 1;
+          setFocusIterator(focusIterator + 1);
+          // focusIterator = +1;
           break;
       }
-      if (focusIterator < 0) focusIterator = 0;
-      if (focusIterator > 5) focusIterator = 5;
+      // if (focusIterator < 0) focusIterator = 0;
+      // if (focusIterator > 5) focusIterator = 5;
+      if (focusIterator - 1 < 0) setFocusIterator(0);
+      if (focusIterator + 1 > 5) setFocusIterator(5);
 
       var scanPosition = scanPositions[focusIterator];
-      scanPosition[0] += camPosition[0];
-      scanPosition[1] += camPosition[1];
-      scanPosition[2] += camPosition[2];
-      setCamPos(scanPosition);
+      scanPosition[0] = camPos[0];
+      scanPosition[1] = camPos[1];
+      scanPosition[2] = camPos[2];
+      // setCamPos(scanPosition);
     };
   }
 
@@ -66,6 +71,41 @@ export default function Home() {
     audioRef.current?.pause();
     audioRef.current!.currentTime = 0;
   }
+
+  const [room, setRoom] = useState("Dach");
+
+  useEffect(() => {
+    switch (focusIterator) {
+      case 0: {
+        setRoom("Dach");
+        break;
+      }
+      case 1: {
+        setRoom("Flur");
+        break;
+      }
+      case 2: {
+        setRoom("Küche");
+        break;
+      }
+      case 3: {
+        setRoom("Parkplatz");
+        break;
+      }
+      case 4: {
+        setRoom("Polizeirevier");
+        break;
+      }
+      case 5: {
+        setRoom("Wohnzimmer");
+        break;
+      }
+      default: {
+        setRoom("Dach");
+        break;
+      }
+    }
+  }, [focusIterator]);
 
   const [pageProgress, setPageProgress] = useState(0);
   const [showIntroGif, setShowIntroGif] = useState(true);
@@ -250,14 +290,14 @@ export default function Home() {
         >
           February 8th, 2018 This is my stepfather Bernd. These selfies were
           taken from the 7th of February 2015 till the 25th of January 2018, two
-          weeks before he died
-          <span
+          weeks before he died.
+          {/* <span
             className={classNames({
               [styles["intro__text__paragraph__dot"]]: pageProgress === 1,
             })}
           >
             .
-          </span>
+          </span> */}
         </p>
         <p
           className={classNames(styles["intro__text__paragraph"], {
@@ -277,14 +317,14 @@ export default function Home() {
           incurable. My memories of that day are tied to places that have since
           become charged with them. To visualize these memories, I returned to
           these places and 3D scanned them. The resulting fragmentary images are
-          analogous to my own fragmented memories of these places
-          <span
+          analogous to my own fragmented memories of these places.
+          {/* <span
             className={classNames({
               [styles["intro__text__paragraph__dot"]]: pageProgress === 2,
             })}
           >
             .
-          </span>
+          </span> */}
         </p>
         <p
           className={classNames(styles["intro__text__paragraph"], {
@@ -296,14 +336,14 @@ export default function Home() {
           be able to navigate through a three-dimensional space, moving through
           the 3D scanned locations. The experience will be accompanied by sound
           elements, including recordings of my voice telling the stories behind
-          these places
-          <span
+          these places.
+          {/* <span
             className={classNames({
               [styles["intro__text__paragraph__dot"]]: pageProgress === 3,
             })}
           >
             .
-          </span>
+          </span> */}
         </p>
         <p
           className={classNames(styles["intro__text__paragraph"], {
@@ -319,28 +359,28 @@ export default function Home() {
           Through these experiences I realized a strange distancing or tabooing
           of this topic. The work is aimed at question the taboo surrounding
           death. Whether it is a suicide or any other cause of death, death is a
-          part of our lives and it is important to confront it
-          <span
+          part of our lives and it is important to confront it.
+          {/* <span
             className={classNames({
               [styles["intro__text__paragraph__dot"]]: pageProgress === 4,
             })}
           >
             .
-          </span>
+          </span> */}
         </p>
         <p
           className={classNames(styles["intro__text__paragraph"], {
             [styles["intro__text__paragraph--hidden"]]: !showIntroParagraphFive,
           })}
         >
-          The Website was realised in collaboration with my friend Tevin Zielke
-          <span
+          The Website was realised in collaboration with my friend Tevin Zielke.
+          {/* <span
             className={classNames({
               [styles["intro__text__paragraph__dot"]]: pageProgress === 5,
             })}
           >
             .
-          </span>
+          </span> */}
         </p>
       </div>
     );
@@ -387,6 +427,25 @@ export default function Home() {
     );
   }
 
+  function AudioPlayer() {
+    return (
+      <video
+        className={styles["audio-player"]}
+        ref={audioRef}
+        src={`/audio/${room}.mp3`}
+        muted
+        // onTimeUpdate={onTimeUpdate}
+      >
+        <track
+          className={styles.track}
+          default
+          kind="captions"
+          src={`/captions/${room}.vtt`}
+        />
+      </video>
+    );
+  }
+
   return (
     <>
       <Head>
@@ -405,7 +464,7 @@ export default function Home() {
             <Image
               src="/images/bernd_s_t.gif"
               alt="Bilder von Bernd in GIF Format."
-              quality={50}
+              // quality={50}
               width={960}
               height={540}
             />
@@ -433,7 +492,7 @@ export default function Home() {
               shadows
               className={styles.canvas}
               camera={{
-                position: [camPosition[0], camPosition[1], camPosition[2]],
+                position: [camPos[0], camPos[1], camPos[2]],
               }}
             >
               <Scan
@@ -466,38 +525,39 @@ export default function Home() {
                 audioURL={focusIterator === 2 ? "/audio/Küche.mp3" : ""}
               />
               <Scan
-                id="polizeirevier"
-                filePath="/scans/Polizeirevier_scan.glb"
+                id="parkplatz"
+                filePath="/scans/Parkplatz_scan.glb"
                 position={scanPositions[3]}
                 props={""}
                 inFocus={focusIterator === 3 ? true : false}
                 float={focusIterator === 3 ? false : true}
-                audioURL={focusIterator === 3 ? "/audio/Polizeirevier.mp3" : ""}
+                audioURL={focusIterator === 3 ? "/audio/Parkplatz.mp3" : ""}
               />
               <Scan
-                id="wohnzimmer"
-                filePath="/scans/Wohnzimmer_scan.glb"
+                id="polizeirevier"
+                filePath="/scans/Polizeirevier_scan.glb"
                 position={scanPositions[4]}
                 props={""}
                 inFocus={focusIterator === 4 ? true : false}
                 float={focusIterator === 4 ? false : true}
-                audioURL={focusIterator === 4 ? "/audio/Wohnzimmer.mp3" : ""}
+                audioURL={focusIterator === 4 ? "/audio/Polizeirevier.mp3" : ""}
               />
               <Scan
-                id="parkplatz"
-                filePath="/scans/Parkplatz_scan.glb"
+                id="wohnzimmer"
+                filePath="/scans/Wohnzimmer_scan.glb"
                 position={scanPositions[5]}
                 props={""}
-                inFocus={focusIterator === 5 ? true : false}
-                float={focusIterator === 5 ? false : true}
-                audioURL={focusIterator === 5 ? "/audio/Parkplatz.mp3" : ""}
+                inFocus={focusIterator === 5}
+                float={focusIterator === 5}
+                audioURL={focusIterator === 5 ? "/audio/Wohnzimmer.mp3" : ""}
               />
 
               <OrbitControls
                 // @ts-ignore: Spring type is Vector3 Type (Typescript return error on position)
                 target={scanPositions[focusIterator]}
-                rotateSpeed={0.3}
+                rotateSpeed={0.05}
                 panSpeed={0.05}
+                zoomSpeed={0.15}
               />
             </Canvas>
           </div>
@@ -518,19 +578,7 @@ export default function Home() {
                 Stop
               </div>
             </div>
-            <video
-              className={styles["audio-player"]}
-              ref={audioRef}
-              src={`/audio/Dach.mp3`}
-              muted
-            >
-              <track
-                className={styles.track}
-                default
-                kind="captions"
-                src="/captions/Dach2.vtt"
-              />
-            </video>
+            <AudioPlayer />
           </div>
         </Suspense>
       </main>
