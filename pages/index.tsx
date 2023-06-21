@@ -9,6 +9,7 @@ import { Suspense, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 const inter = Inter({ subsets: ["latin"] });
 import classNames from "classnames";
+import { Console } from "console";
 
 var scanPosition: number = 0;
 var scanPositions: number[][] = [
@@ -36,26 +37,32 @@ export default function Home() {
     if (typeof window === "object") {
       var fi = focusIterator;
       document.onkeydown = (e) => {
-        console.log("key", e);
-
         switch (e.code) {
           case "ArrowLeft":
             handleStop();
-            // setFocusIterator(focusIterator - 1);
             fi -= 1;
             break;
           case "ArrowRight":
             handleStop();
-            // setFocusIterator(focusIterator + 1);
             fi += 1;
             break;
+          // case "Space": {
+          //   if (audioRef.current?.paused) {
+          //     handlePlay();
+          //   } else {
+          //     handlePause();
+          //   }
+          //   break;
+          // }
         }
-        // if (focusIterator < 0) focusIterator = 0;
-        // if (focusIterator > 5) focusIterator = 5;
-        if (fi < 0) setFocusIterator(0);
-        if (fi > 5) setFocusIterator(5);
-        if (fi >= 0 && fi <= 5) setFocusIterator(fi);
-        var scanPosition = scanPositions[focusIterator];
+
+        if (fi <= 0) {
+          fi = 0;
+        } else if (fi >= 5) {
+          fi = 5;
+        }
+        setFocusIterator(fi);
+        var scanPosition = scanPositions[fi];
         scanPosition[0] += camPos[0];
         scanPosition[1] += camPos[1];
         scanPosition[2] += camPos[2];
@@ -78,39 +85,6 @@ export default function Home() {
   }
 
   const [room, setRoom] = useState("Dach");
-
-  useEffect(() => {
-    switch (focusIterator) {
-      case 0: {
-        setRoom("Dach");
-        break;
-      }
-      case 1: {
-        setRoom("Flur");
-        break;
-      }
-      case 2: {
-        setRoom("Küche");
-        break;
-      }
-      case 3: {
-        setRoom("Parkplatz");
-        break;
-      }
-      case 4: {
-        setRoom("Polizeirevier");
-        break;
-      }
-      case 5: {
-        setRoom("Wohnzimmer");
-        break;
-      }
-      default: {
-        setRoom("Dach");
-        break;
-      }
-    }
-  }, [focusIterator]);
 
   const [pageProgress, setPageProgress] = useState(0);
   const [showIntroGif, setShowIntroGif] = useState(true);
@@ -281,6 +255,14 @@ export default function Home() {
     );
   }
 
+  function Header() {
+    return (
+      <div className={styles.header}>
+        <span>08/02/2018</span>
+      </div>
+    );
+  }
+
   function IntroText() {
     return (
       <div
@@ -432,12 +414,38 @@ export default function Home() {
     );
   }
 
+  const [lang, setLang] = useState("de");
+
+  function LangSwitcher() {
+    return (
+      <div>
+        <span
+          onClick={() => setLang("de")}
+          className={classNames([styles.lang], {
+            [styles["lang--hidden"]]: lang === "en",
+          })}
+        >
+          EN
+        </span>
+        <span
+          onClick={() => setLang("en")}
+          className={classNames([styles.lang], {
+            [styles["lang--hidden"]]: lang === "de",
+          })}
+        >
+          DE
+        </span>
+      </div>
+    );
+  }
+
   function AudioPlayer() {
     return (
       <video
         className={styles["audio-player"]}
         ref={audioRef}
         src={`/audio/${room}.mp3`}
+        // src={`/audio/Dach.mp3`}
         muted
         // onTimeUpdate={onTimeUpdate}
       >
@@ -445,11 +453,45 @@ export default function Home() {
           className={styles.track}
           default
           kind="captions"
-          src={`/captions/${room}.vtt`}
+          src={`/captions/${room}_${lang}.vtt`}
         />
       </video>
     );
   }
+  useEffect(() => {
+    if (pageProgress === 8) {
+      switch (focusIterator) {
+        case 0: {
+          setRoom("Dach");
+          break;
+        }
+        case 1: {
+          setRoom("Flur");
+          break;
+        }
+        case 2: {
+          setRoom("Küche");
+          break;
+        }
+        case 3: {
+          setRoom("Parkplatz");
+          break;
+        }
+        case 4: {
+          setRoom("Polizeirevier");
+          break;
+        }
+        case 5: {
+          setRoom("Wohnzimmer");
+          break;
+        }
+        default: {
+          setRoom("Dach");
+          break;
+        }
+      }
+    }
+  }, [focusIterator, pageProgress]);
 
   return (
     <>
@@ -474,6 +516,8 @@ export default function Home() {
               height={540}
             />
           </div>
+          <Header />
+          <LangSwitcher />
           <IntroText />
           <Instructions />
           <ContentWarning />
@@ -508,7 +552,7 @@ export default function Home() {
                 props={""}
                 inFocus={focusIterator === 0 ? true : false}
                 float={focusIterator === 0 ? false : true}
-                audioURL="/audio/Dach.mp3"
+                audioURL={focusIterator === 0 ? "/audio/Dach.mp3" : ""}
               />
               <Scan
                 id="flur"
@@ -518,7 +562,7 @@ export default function Home() {
                 inFocus={focusIterator === 1 ? true : false}
                 float={focusIterator === 1 ? false : true}
                 // audioURL={focusIterator === 1 ? "/audio/Flur.mp3" : ""}
-                audioURL={"/audio/Flur.mp3"}
+                audioURL={focusIterator === 1 ? "/audio/Flur.mp3" : ""}
               />
               <Scan
                 id="küche"
@@ -552,8 +596,8 @@ export default function Home() {
                 filePath="/scans/Wohnzimmer_scan.glb"
                 position={scanPositions[5]}
                 props={""}
-                inFocus={focusIterator === 5}
-                float={focusIterator === 5}
+                inFocus={focusIterator === 5 ? true : false}
+                float={focusIterator === 5 ? true : false}
                 audioURL={focusIterator === 5 ? "/audio/Wohnzimmer.mp3" : ""}
               />
 

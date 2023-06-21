@@ -7,6 +7,21 @@
   background-color: black;
 }
 
+.lang {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+}
+
+.header {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  span {
+    font-weight: 600;
+  }
+}
+
 .intro {
   width: 100vw;
   height: 100vh;
