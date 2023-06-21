@@ -258,7 +258,7 @@ export default function Home() {
   function Header() {
     return (
       <div className={styles.header}>
-        <span>08/02/2018</span>
+        <span onClick={() => setPageProgress(0)}>08/02/2018</span>
       </div>
     );
   }
@@ -420,7 +420,11 @@ export default function Home() {
     return (
       <div>
         <span
-          onClick={() => setLang("de")}
+          onClick={() => {
+            handleStop();
+            setLang("en");
+            console.log("EN", lang);
+          }}
           className={classNames([styles.lang], {
             [styles["lang--hidden"]]: lang === "en",
           })}
@@ -428,7 +432,9 @@ export default function Home() {
           EN
         </span>
         <span
-          onClick={() => setLang("en")}
+          onClick={() => {
+            setLang("de");
+          }}
           className={classNames([styles.lang], {
             [styles["lang--hidden"]]: lang === "de",
           })}
@@ -449,15 +455,28 @@ export default function Home() {
         muted
         // onTimeUpdate={onTimeUpdate}
       >
+        {/* <track
+          className={styles.track}
+          default
+          kind="captions"
+          src={`/captions/${room}_de.vtt`}
+          style={{ opacity: lang === "de" ? "0" : "0" }}
+        /> */}
         <track
           className={styles.track}
           default
           kind="captions"
-          src={`/captions/${room}_${lang}.vtt`}
+          src={
+            lang === "de"
+              ? `/captions/${room}_de.vtt`
+              : `/captions/${room}_en.vtt`
+          }
+          // style={{ opacity: lang === "de" ? "1" : "1" }}
         />
       </video>
     );
   }
+
   useEffect(() => {
     if (pageProgress === 8) {
       switch (focusIterator) {
@@ -516,8 +535,7 @@ export default function Home() {
               height={540}
             />
           </div>
-          <Header />
-          <LangSwitcher />
+
           <IntroText />
           <Instructions />
           <ContentWarning />
@@ -537,6 +555,8 @@ export default function Home() {
               [styles["scene-container--hidden"]]: pageProgress !== 8,
             })}
           >
+            <Header />
+            <LangSwitcher />
             <Canvas
               shadows
               className={styles.canvas}

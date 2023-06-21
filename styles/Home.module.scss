@@ -9,14 +9,26 @@
 
 .lang {
   position: absolute;
+  z-index: 999;
   top: 30px;
   right: 30px;
+  color: white;
+  cursor: pointer;
+
+  &--hidden {
+    opacity: 0;
+    z-index: -1;
+    pointer-events: none;
+  }
 }
 
 .header {
+  cursor: pointer;
   position: absolute;
+  z-index: 999;
   top: 30px;
   left: 30px;
+  color: white;
   span {
     font-weight: 600;
   }
