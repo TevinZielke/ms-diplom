@@ -624,9 +624,9 @@ export default function Home() {
               <OrbitControls
                 // @ts-ignore: Spring type is Vector3 Type (Typescript return error on position)
                 target={scanPositions[focusIterator]}
-                rotateSpeed={0.05}
-                panSpeed={0.05}
-                zoomSpeed={0.15}
+                rotateSpeed={0.075}
+                panSpeed={0.075}
+                zoomSpeed={0.25}
               />
             </Canvas>
           </div>
