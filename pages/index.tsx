@@ -626,7 +626,7 @@ export default function Home() {
                 target={scanPositions[focusIterator]}
                 rotateSpeed={0.075}
                 panSpeed={0.075}
-                zoomSpeed={0.25}
+                // zoomSpeed={1}
               />
             </Canvas>
           </div>
