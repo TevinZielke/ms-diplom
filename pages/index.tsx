@@ -1,17 +1,14 @@
 /* eslint-disable react/no-children-prop */
 import Head from "next/head";
-import { Inter } from "next/font/google";
 import styles from "@/styles/Home.module.scss";
 import { Canvas } from "@react-three/fiber";
 import Scan from "@/components/scan/Scan";
 import { OrbitControls } from "@react-three/drei";
 import { Suspense, useEffect, useRef, useState } from "react";
 import Image from "next/image";
-const inter = Inter({ subsets: ["latin"] });
 import classNames from "classnames";
-import { Console } from "console";
 
-var scanPosition: number = 0;
+// var scanPosition: number = 0;
 var scanPositions: number[][] = [
   [0, -15, 0],
   [0, 15, 0],
@@ -27,11 +24,11 @@ export default function Home() {
   // var focusIterator = 0;
   const [camPos, setCamPos] = useState(camPosition);
 
-  function repositionCam(currentPos: number) {
-    let pos = ((focusIterator + currentPos) % 5) + 1;
+  // function repositionCam(currentPos: number) {
+  //   let pos = ((focusIterator + currentPos) % 5) + 1;
 
-    return pos;
-  }
+  //   return pos;
+  // }
 
   useEffect(() => {
     if (typeof window === "object") {
@@ -63,9 +60,9 @@ export default function Home() {
         }
         setFocusIterator(fi);
         var scanPosition = scanPositions[fi];
-        scanPosition[0] += camPos[0];
-        scanPosition[1] += camPos[1];
-        scanPosition[2] += camPos[2];
+        // scanPosition[0] += camPos[0];
+        // scanPosition[1] += camPos[1];
+        // scanPosition[2] += camPos[2];
         // setCamPos(scanPosition);
       };
     }
@@ -617,7 +614,7 @@ export default function Home() {
                 position={scanPositions[5]}
                 props={""}
                 inFocus={focusIterator === 5 ? true : false}
-                float={focusIterator === 5 ? true : false}
+                float={focusIterator === 5 ? false : true}
                 audioURL={focusIterator === 5 ? "/audio/Wohnzimmer.mp3" : ""}
               />
 
