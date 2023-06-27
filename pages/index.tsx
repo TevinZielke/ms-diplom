@@ -272,9 +272,9 @@ export default function Home() {
             [styles["intro__text__paragraph--hidden"]]: !showIntroParagraphOne,
           })}
         >
-          February 8th, 2018 This is my stepfather Bernd. These selfies were
-          taken from the 7th of February 2015 till the 25th of January 2018, two
-          weeks before he died.
+          This is my stepfather Bernd. These selfies were taken from the 7th of
+          February 2015 until the 25th of January 2018, two weeks before he
+          died.
           {/* <span
             className={classNames({
               [styles["intro__text__paragraph__dot"]]: pageProgress === 1,
@@ -288,20 +288,20 @@ export default function Home() {
             [styles["intro__text__paragraph--hidden"]]: !showIntroParagraphTwo,
           })}
         >
-          My Mother found the pictures on his phone after the police confiscate
-          it and gave it to us. We can only assume why he took these pictures of
-          himself but will never know the purpose of them since he never used
-          them for anything else. The following experience shows my memories of
-          the day my stepfather Bernd passed away, which significantly shaped my
-          relationship with death. After struggling with depression for years,
-          Bernd decided to take his own life on February 8th, 2018. I am not
-          religious but when a pastor visited our house after Bernd’s death and
-          described the depressions as a kind of tumour it helped me and my
-          family a lot. Sometimes you can cure them but sometimes they are
-          incurable. My memories of that day are tied to places that have since
-          become charged with them. To visualize these memories, I returned to
-          these places and 3D scanned them. The resulting fragmentary images are
-          analogous to my own fragmented memories of these places.
+          My Mother found the pictures on his phone after the police had
+          confiscated it and gave it to us. We can only assume why he took these
+          pictures of himself but we will never know the purpose of them, since
+          he never used them for anything else. The following web experience
+          shows my memories of the day my stepfather Bernd passed away which
+          significantly shaped my relationship to death. After struggling with
+          depression for years, Bernd decided to take his own life on 8 February
+          2018. I am not religious but when a pastor visited our house after
+          Bernd’s death and described the depressions as a kind of tumor, it
+          helped me and my family a lot. Sometimes you can cure them and
+          sometimes not. My memories of that day are tied to places that have
+          since been charged with them. To visualize these memories, I returned
+          to these places and 3D scanned them. The resulting fragmentary images
+          are analogous to my own fragmented memories of these places.
           {/* <span
             className={classNames({
               [styles["intro__text__paragraph__dot"]]: pageProgress === 2,
@@ -316,11 +316,11 @@ export default function Home() {
               !showIntroParagraphThree,
           })}
         >
-          Visitors will have the opportunity to explore my memories. They will
-          be able to navigate through a three-dimensional space, moving through
-          the 3D scanned locations. The experience will be accompanied by sound
-          elements, including recordings of my voice telling the stories behind
-          these places.
+          Visitors have the opportunity to explore my memories. They are able to
+          navigate through a three-dimensional space, moving through the 3D
+          scanned locations. The experience is accompanied by sound elements,
+          including recordings of my voice telling the stories behind these
+          places.
           {/* <span
             className={classNames({
               [styles["intro__text__paragraph__dot"]]: pageProgress === 3,
@@ -337,13 +337,13 @@ export default function Home() {
           I was suddenly confronted with death and dealing with grief and
           experienced the inability of a lot of people to talk about death and
           grief and to approach me as grieving person. I was in a phase of
-          mourning and also thought about the ways I was mourning, was I ‘sad
+          mourning and also thought about the ways I was mourning – was I ‘sad
           enough’? Did I suppress my grief in order to protect myself from
-          uncomfortable emotions? Are there good and bad ways of grieving?
-          Through these experiences I realized a strange distancing or tabooing
-          of this topic. The work is aimed at question the taboo surrounding
-          death. Whether it is a suicide or any other cause of death, death is a
-          part of our lives and it is important to confront it.
+          uncomfortable emotions? Are there even good and bad ways of grieving?
+          Through these experiences, I realized a strange distancing from death
+          as a kind of taboo topic. The work is directed against this tabooing.
+          Whether it is a suicide or any other cause, death is part of our lives
+          and it is important to deal with it.
           {/* <span
             className={classNames({
               [styles["intro__text__paragraph__dot"]]: pageProgress === 4,
@@ -357,7 +357,7 @@ export default function Home() {
             [styles["intro__text__paragraph--hidden"]]: !showIntroParagraphFive,
           })}
         >
-          The Website was realised in collaboration with my friend Tevin Zielke.
+          The website was realized in collaboration with my friend Tevin Zielke.
           {/* <span
             className={classNames({
               [styles["intro__text__paragraph__dot"]]: pageProgress === 5,
